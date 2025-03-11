@@ -15,6 +15,7 @@ The script reads a CSV file containing email addresses and phone numbers, extrac
 ## Prerequisites
 
 * Python 3.x installed.
+* NB: This is all windows based
 
 ## How to Use
 
