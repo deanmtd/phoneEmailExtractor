@@ -15,6 +15,7 @@ The script reads a CSV file containing email addresses and phone numbers, extrac
 ## Prerequisites
 
 * Python 3.x installed.
+* NB: This is all windows based
 
 ## How to Use
 
@@ -105,11 +106,12 @@ The script performs the following steps:
 ## Modifications
 
 * To change the input and output file paths, modify the following variables at the beginning of the script:
+* #Replace "PATH_Dir" with the relevant file path and file names, e.g. "C:\Users\folderName\Documents\pyScripts\emailPhoneExtractor\Data\emailAddsNumbers.csv":
 
     ```python
-    input_file = r"C:\Users\Dean\Documents\pyScripts\emailPhoneExtractor\Data\emailAddsNumbers.csv"
-    email_output_file = r"C:\Users\Dean\Documents\pyScripts\emailPhoneExtractor\Data\emailAddresses.csv"
-    phone_output_file = r"C:\Users\Dean\Documents\pyScripts\emailPhoneExtractor\Data\phoneNumbers.csv"
+    input_file = r"PATH_Dir\emailAddsNumbers.csv"
+    email_output_file = r"PATH_Dir\emailAddresses.csv"
+    phone_output_file = r"PATH_Dir\phoneNumbers.csv"
     ```
 
 * To modify the name extraction logic, change the regular expression used in the following line:
