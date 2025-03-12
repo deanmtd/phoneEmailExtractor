@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email and Phone Number Extractor</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #0366d6;
+        }
+        code {
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+            background-color: #f6f8fa;
+            border-radius: 3px;
+            padding: 2px 4px;
+        }
+        pre {
+            background-color: #f6f8fa;
+            border-radius: 6px;
+            padding: 16px;
+            overflow: auto;
+        }
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        .csv-example {
+            font-family: monospace;
+            white-space: pre;
+        }
+    </style>
+</head>
+<body>
+    <h1>Email and Phone Number Extractor</h1>
+    
+    <p>This Python script extracts email addresses and phone numbers from a CSV file and saves them into separate CSV files.</p>
+    
+    <h2>Purpose</h2>
+    
+    <p>The script reads a CSV file containing email addresses and phone numbers, extracts the email addresses and phone numbers, and then writes them to two separate CSV files. The names associated with each phone number are extracted from the email address.</p>
+    
+    <h2>Files</h2>
+    
+    <ul>
+        <li><code>emailAddsNumbers.csv</code>: (Input) A CSV file containing email addresses and phone numbers in two columns: "Email" and "Phone Number".</li>
+        <li><code>emailAddresses.csv</code>: (Output) A CSV file containing the extracted email addresses in a single column: "Email".</li>
+        <li><code>phoneNumbers.csv</code>: (Output) A CSV file containing the extracted phone numbers and corresponding names (extracted from the email addresses) in two columns: "Name" and "Phone Number".</li>
+    </ul>
+    
+    <h2>Prerequisites</h2>
+    
+    <ul>
+        <li>Python 3.x installed.</li>
+    </ul>
+    
+    <h2>How to Use</h2>
+    
+    <ol>
+        <li>
+            <strong>Prepare the Input File:</strong>
+            <ul>
+                <li>Create a CSV file named <code>emailAddsNumbers.csv</code> in the <code>Data</code> directory, or ensure that the file exists at the specified path.</li>
+                <li>The file should have two columns: "Email" and "Phone Number".</li>
+                <li>Example:</li>
+            </ul>
+            <pre class="csv-example">Email,Phone Number
+john.doe@example.com,+27 12 345 6789
+jane.smith@example.com,+27 21 987 6543</pre>
+        </li>
+        <li>
+            <strong>Run the Script:</strong>
+            <ul>
+                <li>Open a terminal or command prompt.</li>
+                <li>Navigate to the directory containing the Python script.</li>
+                <li>Run the script using the following command:</li>
+            </ul>
+            <pre><code>python your_script_name.py</code></pre>
+            <ul>
+                <li>Replace <code>your_script_name.py</code> with the actual name of your Python script.</li>
+            </ul>
+        </li>
+    </ol>
+    
+    <h3>Code:</h3>
+    
+    <pre><code>#This script Extracts email addresses and phone numbers from a CSV file, saving them to separate CSV files.
+import csv
+import re
+#Replace "PATH_Dir" with the relevant file path and file names:
+input_file = r"PATH_Dir\emailAddsNumbers.csv"
+email_output_file = r"PATH_Dir\emailAddresses.csv"
+phone_output_file = r"PATH_Dir\phoneNumbers.csv"
+email_addresses = []
+phone_numbers = []
+try:
+    with open(input_file, 'r', newline='') as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader)  # Skip the header row
+        for row in reader:
+            email, phone = row
+            email_addresses.append(email)
+            phone_numbers.append(phone)
+    # Write email addresses to emailAddresses.csv
+    with open(email_output_file, 'w', newline='') as email_file:
+        writer = csv.writer(email_file)
+        writer.writerow(['Email'])  # Header row
+        for email in email_addresses:
+            writer.writerow([email])
+    # Extract names from email addresses
+    names = []
+    for email in email_addresses:
+        name_match = re.search(r'([^@]+)@', email)
+        if name_match:
+            names.append(name_match.group(1))
+        else:
+            names.append("unknown")
+    # Write phone numbers to phoneNumbers.csv with corresponding names
+    with open(phone_output_file, 'w', newline='') as phone_file:
+        writer = csv.writer(phone_file)
+        writer.writerow(['Name', 'Phone Number'])  # Header row
+        for name, phone in zip(names, phone_numbers):
+            writer.writerow([name, phone])
+    print(f"Email addresses saved to {email_output_file}")
+    print(f"Phone numbers saved to {phone_output_file}")
+except FileNotFoundError:
+    print(f"Error: Input file '{input_file}' not found.")
+except Exception as e:
+    print(f"An error occurred: {e}")
+</code></pre>
+    
+    <ol start="3">
+        <li>
+            <strong>Check the Output Files:</strong>
+            <ul>
+                <li>The script will create two CSV files: <code>emailAddresses.csv</code> and <code>phoneNumbers.csv</code> in the same directory as the input file, or the directories specified in the script.</li>
+                <li>Open these files to verify the extracted email addresses and phone numbers.</li>
+            </ul>
+        </li>
+    </ol>
+    
+    <h2>Script Details</h2>
+    
+    <p>The script performs the following steps:</p>
+    
+    <ol>
+        <li>Reads the input CSV file.</li>
+        <li>Extracts email addresses and phone numbers.</li>
+        <li>Writes email addresses to <code>emailAddresses.csv</code>.</li>
+        <li>Extracts names from email addresses.</li>
+        <li>Writes phone numbers and corresponding names to <code>phoneNumbers.csv</code>.</li>
+        <li>Handles potential <code>FileNotFoundError</code> exceptions.</li>
+    </ol>
+    
+    <h2>Modifications</h2>
+    
+    <ul>
+        <li>
+            <p>To change the input and output file paths, modify the following variables at the beginning of the script:</p>
+            <pre><code>input_file = r"C:\Users\Dean\Documents\pyScripts\emailPhoneExtractor\Data\emailAddsNumbers.csv"
+email_output_file = r"C:\Users\Dean\Documents\pyScripts\emailPhoneExtractor\Data\emailAddresses.csv"
+phone_output_file = r"C:\Users\Dean\Documents\pyScripts\emailPhoneExtractor\Data\phoneNumbers.csv"</code></pre>
+        </li>
+        <li>
+            <p>To modify the name extraction logic, change the regular expression used in the following line:</p>
+            <pre><code>name_match = re.search(r'([^@]+)@', email)</code></pre>
+        </li>
+    </ul>
+</body>
+</html>
